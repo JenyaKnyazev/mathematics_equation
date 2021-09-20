@@ -94,7 +94,7 @@ char* remove_inside_brackets(char* p, int s, int e) {
     int i, index = 0;
     for (i = 0; i < s; i++)
         res[index++] = p[i];
-    for (i = e + 1; p[i] != '\0'; i++)
+    for (i = e + 1; i < strlen(p); i++)
         res[index++] = p[i];
     res[index] = '\0';
     return res;
@@ -152,39 +152,44 @@ char* add_zero(char* p, int index) {
         res[i] = p[i - 1];
         i++;
     }
+    res[i] = '\0';
     return res;
 }
 char* add_brackets(char* p) {
     char* res = (char*)malloc(sizeof(char) * (strlen(p) + 3));
     res[0] = '(';
     int i = 1;
-    while (p[i-1] != '\0') {
+    while (p[i - 1] != '\0') {
         res[i] = p[i - 1];
         i++;
     }
     res[i++] = ')';
     res[i] = '\0';
     return res;
- }
+}
 double calculate(const char* e) {
-    int len_o, len_n, i, in, r = 0, in2;
+    int len_o, len_n, i, in, r = 0, in2, len_x;
     double* num;
     char* oper, * f;
     int* indexes;
     num = numbers(e, &len_n);
     oper = operators(e, &len_o);
     char* running = remove_space(e);
-    while (*running != '\0') {
+    f = running;
+    running = add_brackets(running);
+    free(f);
+    len_x = len_n;
+    while (*running != '\0' && len_n > 1 || len_x == 1) {
         r = 0;
         indexes = run(running);
-        for (i = indexes[0]; i < indexes[1] - r; i++)
-            if (running[i] == '-' && !(running[i - 1] >= '0' && running[i - 1] <= '9')) {
+        for (i = indexes[0]; i < indexes[1]; i++)
+            if (running[i] == '-' && (!(running[i - 1] >= '0' && running[i - 1] <= '9') || i - 1 == 0)) {
                 in = index_oper(running, i);
                 in2 = index_num(running, i);
                 num[in2] *= -1;
                 remove_oper(&oper, in, &len_o);
                 f = running;
-                running = remove_brackets(running, i, i);
+                running = remove_inside_brackets(running, i, i);
                 r++;
                 free(f);
             }
@@ -196,7 +201,7 @@ double calculate(const char* e) {
                 remove_oper(&oper, in, &len_o);
                 remove_num(&num, in2, &len_n);
                 f = running;
-                running = remove_brackets(running, i, i);
+                running = remove_inside_brackets(running, i, i);
                 free(f);
                 i--;
                 r++;
@@ -209,7 +214,7 @@ double calculate(const char* e) {
                 remove_oper(&oper, in, &len_o);
                 remove_num(&num, in2, &len_n);
                 f = running;
-                running = remove_brackets(running, i, i);
+                running = remove_inside_brackets(running, i, i);
                 free(f);
                 i--;
                 r++;
@@ -223,6 +228,7 @@ double calculate(const char* e) {
             free(f);
         }
         free(indexes);
+        len_x = 0;
     }
     return num[0];
 }
@@ -232,7 +238,7 @@ int main() {
     do {
         printf("Enter mathematic equation\n");
         gets(e);
-        printf( "solution = %lf\n", calculate(add_brackets(e)) );
+        printf( "solution = %lf\n", calculate(e) );
         printf("continue press c exit other\n");
         ch = getchar();
         while (getchar() != '\n');

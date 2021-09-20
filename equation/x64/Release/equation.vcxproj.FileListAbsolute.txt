@@ -1,1 +1,2 @@
 C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\x64\Release\equation.exe
+C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\x64\Release\equation.exe

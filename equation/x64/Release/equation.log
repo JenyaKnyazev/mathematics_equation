@@ -1,10 +1,11 @@
 ﻿  equation.c
-C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\equation.c(174,20): warning C4090: 'function': different 'const' qualifiers
-C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\equation.c(175,23): warning C4090: 'function': different 'const' qualifiers
-C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\equation.c(176,35): warning C4090: 'function': different 'const' qualifiers
-C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\equation.c(234,13): warning C4013: 'gets' undefined; assuming extern returning int
+C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\equation.c(175,20): warning C4090: 'function': different 'const' qualifiers
+C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\equation.c(176,23): warning C4090: 'function': different 'const' qualifiers
+C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\equation.c(177,35): warning C4090: 'function': different 'const' qualifiers
+C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\equation.c(240,13): warning C4013: 'gets' undefined; assuming extern returning int
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 18 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  16 of 17 functions (94.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  equation.vcxproj -> C:\Users\david\Desktop\C_Projects\mathematic_equation\equation\x64\Release\equation.exe
+  equation.vcxproj -> C:\Users\david\Desktop\C_Projects\mathematic_equation_beta\equation\x64\Release\equation.exe
