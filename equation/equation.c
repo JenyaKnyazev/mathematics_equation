@@ -267,7 +267,7 @@ int main() {
     char e[500];
     char ch;
     do {
-        printf("Enter mathematic equation\n");
+        printf("Enter mathematic equation like (23.45*8)(4/5)*(((5+5)/2)+3)+7-19*2\n");
         gets(e);
         printf( "solution = %lf\n", calculate(e) );
         printf("continue press c exit other\n");
