@@ -6,7 +6,7 @@ char* remove_space(char* p) {
     char* res = (char*)malloc(sizeof(char) * (strlen(p) + 1));
     int i = 0;
     while (*p != '\0') {
-        if (*p != ' ')
+        if (*p == ')' || *p == '(' || *p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '.' || (*p >= '0' && *p <= '9'))
             res[i++] = *p;
         p++;
     }
@@ -103,6 +103,8 @@ int* run(char* p) {
     int i, r;
     int* res = (int*)malloc(sizeof(int) * 2);
     for (i = 0; p[i] != ')' && p[i] != '\0'; i++);
+    if (p[i] == '\0')
+        i--;
     for (r = i - 1; r > 0 && p[r] != '('; r--);
     res[0] = r;
     res[1] = i;
@@ -142,12 +144,18 @@ void print(double* p, int n) {
         printf("%.2lf,", p[i]);
     putchar('\n');
 }
-char* add_zero(char* p, int index) {
+void print2(char* p, int n) {
+    int i;
+    for (i = 0; i < n; i++)
+        printf("%c,", p[i]);
+    putchar('\n');
+}
+char* add_char(char* p, int index, char ch) {
     char* res = (char*)malloc(sizeof(char) * (strlen(p) + 2));
     int i;
     for (i = 0; i < index; i++)
         res[i] = p[i];
-    res[i++] = '0';
+    res[i++] = ch;
     while (p[i - 1] != '\0') {
         res[i] = p[i - 1];
         i++;
@@ -167,23 +175,42 @@ char* add_brackets(char* p) {
     res[i] = '\0';
     return res;
 }
+char* correct(char* p) {
+    char* f;
+    char* res = (char*)malloc(sizeof(char) * (strlen(p) + 1));
+    int i;
+    for (i = 0; p[i] != '\0'; i++)
+        res[i] = p[i];
+    res[i] = '\0';
+    for (i = 0; res[i] != '\0'; i++)
+        if (res[i] == ')' && res[i + 1] == '(') {
+            f = res;
+            res = add_char(res, i + 1, '*');
+            free(f);
+        }
+    return res;
+}
 double calculate(const char* e) {
     int len_o, len_n, i, in, r = 0, in2, len_x;
     double* num;
     char* oper, * f;
     int* indexes;
-    num = numbers(e, &len_n);
-    oper = operators(e, &len_o);
     char* running = remove_space(e);
     f = running;
     running = add_brackets(running);
     free(f);
+    f = running;
+    running = correct(running);
+    free(f);
+    num = numbers(running, &len_n);
+    oper = operators(running, &len_o);
     len_x = len_n;
     while (*running != '\0' && len_n > 1 || len_x == 1) {
         r = 0;
         indexes = run(running);
+        //puts(running);
         for (i = indexes[0]; i < indexes[1]; i++)
-            if (running[i] == '-' && (!(running[i - 1] >= '0' && running[i - 1] <= '9') || i - 1 == 0)) {
+            if (running[i] == '-' && (!(running[i - 1] >= '0' && running[i - 1] <= '9') || i == 0) && running[i - 1] != ')') {
                 in = index_oper(running, i);
                 in2 = index_num(running, i);
                 num[in2] *= -1;
@@ -219,16 +246,20 @@ double calculate(const char* e) {
                 i--;
                 r++;
             }
+
         f = running;
+        while (running[indexes[1] - r] != ')')
+            r--;
         running = remove_inside_brackets(running, indexes[0], indexes[1] - r);
         free(f);
         if (*running != '\0') {
             f = running;
-            running = add_zero(running, indexes[0]);
+            running = add_char(running, indexes[0], '0');
             free(f);
         }
         free(indexes);
         len_x = 0;
+        //puts("-------------------------------------------------------------------------");
     }
     return num[0];
 }
@@ -244,3 +275,4 @@ int main() {
         while (getchar() != '\n');
     } while (ch == 'c');
 }
+
